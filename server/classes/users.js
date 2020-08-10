@@ -15,10 +15,6 @@ class Users {
         return this.users;
     }
 
-    getUser(id) {
-        return this.users.find(user => user.id === id);
-    }
-
     getUsers() {
         return this.users;
     }
@@ -33,12 +29,7 @@ class Users {
 
         return userDeleted;
     }
-
-
-
-
 }
-
 
 module.exports = {
     Users

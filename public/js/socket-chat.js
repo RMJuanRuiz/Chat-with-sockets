@@ -1,7 +1,5 @@
 let socket = io();
 
-let params = new URLSearchParams(window.location.search);
-
 if (!params.has('name') || !params.has('room')) {
     window.location = 'index.html';
     throw new Error('Name and room are required!');
@@ -12,36 +10,21 @@ let user = {
     room: params.get('room')
 }
 
-// .on is for listening to information
-socket.on('connect', function() {
-
+socket.on('connect', () => {
     socket.emit('JoinChat', user, (resp) => {
-        console.log('Users connected: ', resp);
+        renderUsers(resp);
     });
-
 });
 
-socket.on('disconnect', function() {
-    console.log('Connection with server lost');
-});
-
-// Listen to information
-/* socket.emit('sendMessage', 'asdsa', (resp) => {
-
-});
- */
-
-// Listen to information
-socket.on('sendMessage', function(msg) {
-    console.log(msg);
+socket.on('sendMessage', (msg) => {
+    renderMessage(msg, false);
 });
 
 // Get users list every time that an user connects or disconnects
 socket.on('usersConnected', (users) => {
-    console.log('UsersConnected:', users);
+    renderUsers(users);
 });
 
-// get private Messages
-socket.on('privateMessage', (message) => {
-    console.log('Private Message: ', message);
-})
+socket.on('disconnect', () => {
+    console.log('Connection with server lost');
+});
